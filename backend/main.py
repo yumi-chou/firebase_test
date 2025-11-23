@@ -9,11 +9,9 @@ from firebase_admin import credentials, auth
 app = FastAPI()
 firebase_json = os.getenv("FIREBASE_SERVICE_ACCOUNT")
 if firebase_json:
-    # Vercel 上走這條：從環境變數讀 JSON 字串
     cred_dict = json.loads(firebase_json)
     cred = credentials.Certificate(cred_dict)
 else:
-    # 本機開發走這條：用檔案
     cred = credentials.Certificate("firebase-service-account.json")
 
 firebase_admin.initialize_app(cred)
@@ -23,6 +21,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "https://firebase-test-jflf.vercel.app/",
     ],
     allow_credentials=True,
     allow_methods=["*"],
